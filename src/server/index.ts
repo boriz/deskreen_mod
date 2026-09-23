@@ -111,6 +111,14 @@ class DeskreenSignalingServer {
 	init(): void {
 		this.app = new Koa();
 		const router = new Router();
+		router.get('/api/room-id', (ctx) => {
+			ctx.set('Cache-Control', 'no-store');
+			ctx.body = {
+				roomId:
+					getDeskreenGlobal().sharingSessionService
+						?.waitingForConnectionSharingSession?.roomID ?? null,
+			};
+		});
 
 		this.app.use(cors());
 		this.app.use(router.routes());

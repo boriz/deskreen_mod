@@ -65,8 +65,32 @@ function MainView() {
 			return;
 		}
 
-		const fallbackRoomId = Math.random().toString(36).substring(2, 10);
-		setConnectionRoomId(fallbackRoomId);
+		let cancelled = false;
+		let retryTimeout: ReturnType<typeof setTimeout> | undefined;
+
+		const fetchWaitingRoomId = async (): Promise<void> => {
+			try {
+				const response = await fetch('/api/room-id', { cache: 'no-store' });
+				const data = (await response.json()) as { roomId: string | null };
+				if (!cancelled && data.roomId) {
+					setConnectionRoomId(data.roomId);
+					return;
+				}
+			} catch (error) {
+				console.error('Failed to get the active sharing session', error);
+			}
+
+			if (!cancelled) {
+				retryTimeout = setTimeout(fetchWaitingRoomId, 1000);
+			}
+		};
+
+		void fetchWaitingRoomId();
+
+		return () => {
+			cancelled = true;
+			if (retryTimeout) clearTimeout(retryTimeout);
+		};
 	}, []);
 
 	useEffect(handleSetVideoQuality(videoQuality, peer), [videoQuality, peer]);

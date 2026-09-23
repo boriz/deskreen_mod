@@ -159,15 +159,12 @@ const ScanQRStep: React.FC = () => {
 	const portString = useMemo(() => {
 		return `:${clientViewerPort}`;
 	}, [clientViewerPort]);
-	const roomPath = useMemo(() => {
-		return roomID !== '' ? `/${roomID}` : '';
-	}, [roomID]);
 	const shareUrl = useMemo(() => {
 		if (!isViewerSlotAvailable) return '';
 		if (LOCAL_LAN_IP === '') return '';
-		if (roomPath === '') return '';
-		return `http://${LOCAL_LAN_IP}${portString}${roomPath}`;
-	}, [LOCAL_LAN_IP, portString, roomPath, isViewerSlotAvailable]);
+		if (roomID === '') return '';
+		return `http://${LOCAL_LAN_IP}${portString}/`;
+	}, [LOCAL_LAN_IP, portString, roomID, isViewerSlotAvailable]);
 	const isQrInteractive = shareUrl !== '';
 	const connectionLimitTooltip = t('connection-limit-reached-tooltip');
 	const qrTooltipContent = isQrInteractive
@@ -376,7 +373,7 @@ const ScanQRStep: React.FC = () => {
 					<Col>
 						<H3>
 							{isQrInteractive
-								? `${hostname}${portString}${roomPath}`
+								? `${hostname}${portString}/`
 								: t('waiting-for-connection')}
 						</H3>
 						<H3>{isQrInteractive ? shareUrl : t('waiting-for-connection')}</H3>

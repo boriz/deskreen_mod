@@ -1,5 +1,19 @@
 # Deskreen CE (Community Edition)
 
+## About This Fork
+
+This repository is a fork of the original [Deskreen CE project](https://github.com/pavlobu/deskreen). It is focused on using the Tesla in-car Chromium browser as a secondary screen for a computer on the same local network.
+
+Changes in this fork:
+
+- Uses a stable viewer URL (`http://<computer-ip>:<port>/`) without a random room ID in the path.
+- Lets the web viewer retrieve the active sharing room from the local Deskreen server and wait until a session is available.
+- Adds unsigned portable Windows EXE builds for x64, ia32, and arm64.
+
+---
+
+
+
 ![platform](https://img.shields.io/badge/platform-Windows%20%7C%20MacOS%20%7C%20Linux-lightgrey)
 (Over 2M downloads during 5 years since launch)
 
